@@ -6,8 +6,8 @@ class GameBoard
   
   def initialize
     @board = create_board
-  end
-
+  end 
+  
   def create_board
     Array.new(6) { Array.new(7, "") }
   end
