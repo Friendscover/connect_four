@@ -12,7 +12,7 @@ describe "creates coin" do
     end
 
     it "with name player1 " do
-      expect(@coin.name).to eq("player1")
+      expect(@coin.name).to eq(name)
     end
 
     it "with icon ★" do 
