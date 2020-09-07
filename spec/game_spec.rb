@@ -56,27 +56,22 @@ describe "connect_four" do
       expect(@game.check_winner(player1)).to eq(true)
     end
 
-    it "when the game_board is full" do
-      i = 0
-      while i < 2
-        3.times { @game.set_position(player1, i) }
-        3.times { @game.set_position(@game.player2, i + 1) }
-        3.times { @game.set_position(@game.player2, i) }
-        3.times { @game.set_position(@game.player1, i + 1) }
-        i += 1
-      end
+    it "when one player has a right diagonal row" do
+      @game.set_position(player1, 0)
+      2.times { @game.set_position(player1, 1) }
+      3.times { @game.set_position(player1, 2) }
+      3.times { @game.set_position(@game.player2, 3) }
+      @game.set_position(player1, 3)
+      expect(@game.check_winner(player1)).to eq(true)
+    end
 
-      i = 3
-      while i < 6
-        3.times { @game.set_position(player1, i) }
-        3.times { @game.set_position(@game.player2, i + 1) }
-        3.times { @game.set_position(@game.player2, i) }
-        3.times { @game.set_position(@game.player1, i + 1) }
-        i += 1
-      end
-      
-      expect(@game.check_winner(player1)).to eq(false)
-      expect(@game.check_winner(@game.player2)).to eq(false)
+    it "when one player has a left diagonal row" do
+      @game.set_position(player1, 4)
+      2.times { @game.set_position(player1, 3) }
+      3.times { @game.set_position(player1, 2) }
+      3.times { @game.set_position(@game.player2, 1) }
+      @game.set_position(player1, 1)
+      expect(@game.check_winner(player1)).to eq(true)
     end
   end
 end
