@@ -31,6 +31,10 @@ describe "connect_four" do
       6.times { @game.set_position(player1, 0) }
       expect(@game.set_position(@game.player1)).to eq(false)
     end
+
+    it "gets user input and sanitizes it for the array position" do
+      expect(@game.get_input).to be < 6
+    end
   end
 
   context "game_over" do

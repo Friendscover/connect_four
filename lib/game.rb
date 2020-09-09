@@ -1,16 +1,25 @@
-#checks if won
-#how the fuck does the game see won?
-#creates player + board
-# => player returns player
-#loops the game
+require_relative "game_board"
+require_relative "coin.rb"
+
 class Game 
   attr_accessor :board, :player1, :player2, :current_player
 
   def initialize
     @board = GameBoard.new
-    @player1 = Coin.new
-    @player2 = Coin.new("coin2", "★")
-    @current_player = @player1
+    @player1 = Coin.new("Moon")
+    @player2 = Coin.new("Star", "★")
+    @current_player = @player2
+  end
+
+  def play
+   until check_winner(current_player)
+    toggle_player
+    user_input = get_input
+    set_position(current_player, user_input)
+    print_board
+   end
+
+   print_winner
   end
 
   def set_position(player, position = 0)
@@ -23,7 +32,7 @@ class Game
   end
 
   def full_column?(position)
-    if board.board[0][position] == ""
+    if board.board[0][position] == " "
       false
     else
       true
@@ -37,14 +46,28 @@ class Game
     loop do 
       height -= 1
       marker = board.board[height][position]
-      break if marker == ""
+      break if marker == " "
     end
     
     return height
   end
 
+  def get_input
+    puts "#{current_player.name} it's your turn! Choose a position between 1 and 7"
+    input = gets.chomp
+    until input.to_i > 0 && input.to_i < 8
+      puts "This is a wrong position. Choose again!"
+      input = gets.chomp
+    end
+    #substracts 1 to not got out of bounds of the game
+    return input.to_i - 1
+  end
+
+  def toggle_player
+    @current_player == player1 ? @current_player = player2 : @current_player = player1
+  end
+
   def check_winner(player)
-    print_board
     check_position(player.icon) ? true : false
   end
 
@@ -60,13 +83,7 @@ class Game
 
           coins_diagonal_left = check_diagonal_left(array_index, position_index)
 
-          if coins_column.join == icon * 4
-            return true
-          elsif coins_row.join == icon * 4
-            return true
-          elsif coins_diagonal_right.join == icon * 4
-            return true
-          elsif coins_diagonal_left.join == icon * 4
+          if coins_column.join == icon * 4 || coins_row.join == icon * 4 || coins_diagonal_right.join == icon * 4 || coins_diagonal_left.join == icon * 4
             return true
           end
         end
@@ -134,9 +151,15 @@ class Game
 
   def print_board
     board.board.each do |elements|
-      p elements
+      p elements.join(" | ")
     end
+  end
+
+  def print_winner
+    puts "The Winner is #{current_player.name}!"
+    puts "Congratz! You are talented!"
   end
 end
 
-p g = Game.new
+g = Game.new
+g.play
